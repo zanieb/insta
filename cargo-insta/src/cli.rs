@@ -889,13 +889,14 @@ fn prepare_test_runner<'snapshot_ref>(
     proc.arg("--color");
     proc.arg(color);
     proc.args(extra_args);
+    // Pass cargo options
+    if !cmd.cargo_options.is_empty() {
+        proc.args(&cmd.cargo_options);
+    }
     // Items after this are passed to the test runner
     proc.arg("--");
     if !cmd.no_quiet && matches!(test_runner, TestRunner::CargoTest) {
         proc.arg("-q");
-    }
-    if !cmd.cargo_options.is_empty() {
-        proc.args(&cmd.cargo_options);
     }
     // Currently libtest uses a different approach to color, so we need to pass
     // it again to get output from the test runner as well as cargo. See
